@@ -1,5 +1,7 @@
 import sys
-sys.path.append("..") # package location --> root to package parent directory 
+sys.path.append("..") 
+# package location --> root to package parent directory 
+#-------------------------------------------------------
 from package.stack import stack
 import random
 
