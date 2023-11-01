@@ -127,15 +127,6 @@ class SLL(LL):
             target.next = None
             self.len -= 1
 
-        
-        # while temp.next:
-        #     if temp.element == element:
-        #         temp.next = temp.next.next
-        #         self.len -= 1
-        #     if not temp.next:
-        #         self.tail = temp
-        #     temp = temp.next
-    
     def __getitem__(self, item):
         n = self.head
         while n is not None and item > 0:
