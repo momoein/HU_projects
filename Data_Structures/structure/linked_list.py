@@ -37,15 +37,17 @@ class LL:
     def search(self, element):
         if self.head is None:
             print("Error: list is empty")
-            return
-        temp = self.head
-        while temp is not None and temp.element != element:
-            temp = temp.next
-        if temp is None:
+            return (None, None)
+        target = self.head
+        previous = None
+        while target is not None and target.element != element:
+            previous = target
+            target = target.next
+        if target is None:
             print("Error: not found element")
-            return
+            return (target, previous)
         else:
-            return temp
+            return (target, previous)
 
 
 
@@ -59,23 +61,29 @@ class SLL(LL):
         self.len += 1
 
     def add_last(self, data):
-        self.tail.next = SLLNode(data)
-        self.tail = self.tail.next
-        self.len += 1
-
-    def add_after(self, element, data):
         node = SLLNode(data)
-        res = self.search(element)
-        if res is not None and res.next is not None:
-            node.next = res.next
-            res.next = node
-            self.len += 1
-        elif res is not None and res.next is None:
-            res.next = node
+        if self.is_empty():
+            self.head = node
             self.tail = node
             self.len += 1
         else:
-            print(f"Error: not found element: {element}")
+            self.tail.next = node
+            self.tail = self.tail.next
+            self.len += 1
+
+    def add_after(self, element, data):
+        node = SLLNode(data)
+        target, _ = self.search(element)
+        if target is not None and target.next is not None:
+            node.next = target.next
+            target.next = node
+            self.len += 1
+        elif target is not None and target.next is None:
+            target.next = node
+            self.tail = node
+            self.len += 1
+        else:
+            print(f"Error: not found element {element}")
 
     def del_first(self):
         if not self.is_empty():
@@ -85,8 +93,16 @@ class SLL(LL):
             self.len -= 1
 
     def del_last(self):
+        if self.is_empty():
+            print(f"Error {__name__}: list is empty")
+            return
+        elif self.head.next is None:
+            self.head = None
+            self.tail = None
+            self.len -= 1
+            return
         temp = self.head
-        while temp.next:
+        while temp and temp.next is not None:
             if not temp.next.next:
                 temp.next = None
                 self.tail = temp
@@ -94,17 +110,33 @@ class SLL(LL):
             else:
                 temp = temp.next
     
-    def del_after(self, element):
-        temp = self.head
-        while temp.next:
-            if temp.element == element:
-                temp.next = temp.next.next
-                self.len -= 1
-            if not temp.next:
-                self.tail = temp
-            temp = temp.next
+    def delete(self, element):
+        target, previous = self.search(element)
+        if target is None and previous is None:
+            print(f"Error: list {__name__} is empty")
+        elif target is None and previous is not None:
+            print(f"Error: element {element} not found")
+        elif target is not None and previous is None:
+            self.head = target.next
+            target.next = None
+            if target is self.tail:
+                self.tail = None
+            self.len -= 1
+        else:
+            previous.next = target.next
+            target.next = None
+            self.len -= 1
+
+        
+        # while temp.next:
+        #     if temp.element == element:
+        #         temp.next = temp.next.next
+        #         self.len -= 1
+        #     if not temp.next:
+        #         self.tail = temp
+        #     temp = temp.next
     
-    def __getitem__(self,item):
+    def __getitem__(self, item):
         n = self.head
         while n is not None and item > 0:
             n = n.next
