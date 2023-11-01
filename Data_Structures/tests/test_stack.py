@@ -2,7 +2,7 @@ import sys
 sys.path.append("..") 
 # package location --> root to package parent directory 
 #-------------------------------------------------------
-from package.stack import stack
+from structure.stack import stack
 import random
 
 s = stack(8)

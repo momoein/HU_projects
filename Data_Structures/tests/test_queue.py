@@ -1,8 +1,4 @@
-import sys
-sys.path.append("..") 
-# package location --> root to package parent directory 
-#-------------------------------------------------------
-from package.queue import queue
+from structure.queue import queue
 import random
 
 lis = [random.randint(0, 9) for i in range(10)]
