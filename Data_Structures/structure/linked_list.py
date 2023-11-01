@@ -29,14 +29,13 @@ class LL:
             print("  ", node.element)
             node = node.next
         print("}")
-        print(node)
     
     def search(self, element):
         if self.head is None:
             print("Error: list is empty")
             return
         temp = self.head
-        while temp.element != element and temp is not None:
+        while temp is not None and temp.element != element:
             temp = temp.next
         if temp is None:
             print("Error: not found element")
@@ -54,17 +53,28 @@ class SLL(LL):
         self.head = node
         self.len += 1
 
+    def add_last(self, data):
+        self.tail.next = SLLNode(data)
+        self.tail = self.tail.next
+        self.len += 1
+
+    def add_after(self, element, data):
+        node = SLLNode(data)
+        res = self.search(element)
+        if res is not None and res.next is not None:
+            node.next = res.next
+            res.next = node
+        elif res is not None and res.next is None:
+            res.next = node
+        else:
+            print(f"Error: not found element: {element}")
+
     def del_first(self):
         if not self.is_empty():
             self.head = self.head.next
             if self.len == 1:
                 self.tail = self.head
             self.len -= 1
-
-    def add_last(self, data):
-        self.tail.next = SLLNode(data)
-        self.tail = self.tail.next
-        self.len += 1
 
     def del_last(self):
         temp = self.head
@@ -75,18 +85,6 @@ class SLL(LL):
                 self.len -= 1
             else:
                 temp = temp.next
-
-    def add_after(self, element, data):
-        node = SLLNode(data)
-        temp = self.head
-        while temp.next:
-            if temp.element == element:
-                node.next = temp.next
-                temp.next = node
-                self.len += 1
-                if temp == self.tail:
-                    self.tail = temp.next
-            temp = temp.next
     
     def del_after(self, element):
         temp = self.head
