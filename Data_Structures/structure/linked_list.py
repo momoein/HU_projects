@@ -1,13 +1,14 @@
-
 class SLLNode:
     def __init__(self, element):
         self.element = element
         self.next = None
 
-class DLLNode:
+
+class DLLNode(SLLNode):
     def __init__(self, element):
-        self.element = element
-        self.next = None
+        super().__init__(element)
+        self.prev = None
+
 
 class LL:
     def __init__(self):
@@ -15,7 +16,7 @@ class LL:
         self.tail = None
         self.len = 0
     def is_empty(self):
-        return self.len == 0
+        return self.head is None
     def size(self):
         return self.len
     def first(self):
@@ -29,26 +30,43 @@ class LL:
             node = node.next
         print("}")
         print(node)
+    
+    def search(self, element):
+        if self.head is None:
+            print("Error: list is empty")
+            return
+        temp = self.head
+        while temp.element != element and temp is not None:
+            temp = temp.next
+        if temp is None:
+            print("Error: not found element")
+            return
+        else:
+            return temp
+
 
 class SLL(LL):
-    def insert_first(self, data):
+    def add_first(self, data):
         node = SLLNode(data)
         if self.is_empty():
             self.tail = node
         node.next = self.head
         self.head = node
         self.len += 1
-    def delete_first(self):
+
+    def del_first(self):
         if not self.is_empty():
             self.head = self.head.next
             if self.len == 1:
                 self.tail = self.head
             self.len -= 1
-    def insert_last(self, data):
+
+    def add_last(self, data):
         self.tail.next = SLLNode(data)
         self.tail = self.tail.next
         self.len += 1
-    def delete_last(self):
+
+    def del_last(self):
         temp = self.head
         while temp.next:
             if not temp.next.next:
@@ -57,7 +75,8 @@ class SLL(LL):
                 self.len -= 1
             else:
                 temp = temp.next
-    def insert_after(self, element, data):
+
+    def add_after(self, element, data):
         node = SLLNode(data)
         temp = self.head
         while temp.next:
@@ -69,7 +88,7 @@ class SLL(LL):
                     self.tail = temp.next
             temp = temp.next
     
-    def delete_after(self, element):
+    def del_after(self, element):
         temp = self.head
         while temp.next:
             if temp.element == element:
@@ -89,7 +108,8 @@ class SLL(LL):
         raise IndexError("index out of range")
     
     def __iter__(self):
-        n = self.head
-        while n:
-            yield n.element
-            n = n.next
+        node = self.head
+        while node:
+            yield node.element
+            node = node.next
+    
