@@ -10,6 +10,7 @@ class DLLNode(SLLNode):
         self.prev = None
 
 
+
 class LL:
     def __init__(self):
         self.head = None
@@ -17,11 +18,14 @@ class LL:
         self.len = 0
     def is_empty(self):
         return self.head is None
+    
     def size(self):
         return self.len
+    
     def first(self):
         if not self.is_empty():
             return self.head
+        
     def show_all(self):
         node = self.head
         print("list elements:", "{", sep="\n")
@@ -44,6 +48,7 @@ class LL:
             return temp
 
 
+
 class SLL(LL):
     def add_first(self, data):
         node = SLLNode(data)
@@ -64,8 +69,11 @@ class SLL(LL):
         if res is not None and res.next is not None:
             node.next = res.next
             res.next = node
+            self.len += 1
         elif res is not None and res.next is None:
             res.next = node
+            self.tail = node
+            self.len += 1
         else:
             print(f"Error: not found element: {element}")
 
@@ -98,7 +106,7 @@ class SLL(LL):
     
     def __getitem__(self,item):
         n = self.head
-        while n is not None and item>0:
+        while n is not None and item > 0:
             n = n.next
             item -= 1
         if item == 0 and n:
