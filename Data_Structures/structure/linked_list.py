@@ -207,6 +207,7 @@ class DLL(LL):
     def del_first(self):
         temp = self.head
         self.head = self.head.next
+        self.head.del_prev()
         temp.del_pointers()
 
     def del_last(self):
