@@ -32,12 +32,12 @@ class LL:
     def create_node(self, NodeType, *parametr):
         return NodeType(*parametr)
     
-    def search(self, element):
+    def search(self, attrname, value):
         if self.is_empty():
             print("Error: list is empty")
             return
         target = self.head
-        while target is not None and target.element != element:
+        while target is not None and getattr(target, attrname) != value:
             target = target.next
         if target is None:
             print("Error: not found element")
