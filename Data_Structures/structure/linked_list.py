@@ -31,14 +31,6 @@ class LL:
         
     def create_node(self, NodeType, *parametr):
         return NodeType(*parametr)
-
-    def show_all(self):
-        node = self.head
-        print("list elements:", "{", sep="\n")
-        while node:
-            print("  ", node.element)
-            node = node.next
-        print("}")
     
     def search(self, element):
         if self.is_empty():
