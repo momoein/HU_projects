@@ -40,7 +40,7 @@ class LL:
         while target is not None and getattr(target, attrname) != value:
             target = target.next
         if target is None:
-            print("Error: not found element")
+            print(f"not found node with {attrname} == {value}")
             return
         else:
             return target
@@ -75,9 +75,9 @@ class SLL(LL):
             self.tail = self.tail.next
             self.len += 1
 
-    def add_after(self, element, data):
-        node = SLLNode(data)
-        target, _ = self.search(element)
+    def add_after(self, attrname, srch_value, NodeType, *parametr):
+        node = self.create_node(NodeType, *parametr)
+        target, _ = self.search(attrname, srch_value)
         if target is not None and target.next is not None:
             node.next = target.next
             target.next = node
@@ -87,7 +87,8 @@ class SLL(LL):
             self.tail = node
             self.len += 1
         else:
-            print(f"Error: not found element {element}")
+            mtd_name = self.add_after.__name__
+            print(f"{mtd_name}() not found node with {attrname} == {srch_value}")
 
     def del_first(self):
         if not self.is_empty():
@@ -141,7 +142,7 @@ class SLL(LL):
             previous = target
             target = target.next
         if target is None:
-            print("Error: not found element")
+            print(f"Error: not found {value}")
             return (target, previous)
         else:
             return (target, previous)
