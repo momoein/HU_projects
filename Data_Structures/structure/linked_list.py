@@ -210,7 +210,10 @@ class DLL(LL):
         temp.del_pointers()
 
     def del_last(self):
-        pass
+        temp = self.tail
+        self.tail = self.tail.prev
+        self.tail.del_next()
+        temp.del_pointers()
 
     def del_this(self, node):
         if node == self.head:
