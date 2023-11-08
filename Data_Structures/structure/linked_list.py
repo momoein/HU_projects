@@ -4,10 +4,12 @@ class SLLNode:
         self.next = None
 
 
-class DLLNode(SLLNode):
+
+class DLLNode:
     def __init__(self, element):
-        super().__init__(element)
+        self.element = element
         self.prev = None
+        self.next = None
 
 
 
@@ -16,6 +18,7 @@ class LL:
         self.head = None
         self.tail = None
         self.len = 0
+
     def is_empty(self):
         return self.head is None
     
@@ -26,6 +29,9 @@ class LL:
         if not self.is_empty():
             return self.head
         
+    def create_node(self, NodeType, *parametr):
+        return NodeType(*parametr)
+
     def show_all(self):
         node = self.head
         print("list elements:", "{", sep="\n")
@@ -35,19 +41,25 @@ class LL:
         print("}")
     
     def search(self, element):
-        if self.head is None:
+        if self.is_empty():
             print("Error: list is empty")
-            return (None, None)
+            return
         target = self.head
-        previous = None
         while target is not None and target.element != element:
-            previous = target
             target = target.next
         if target is None:
             print("Error: not found element")
-            return (target, previous)
+            return
         else:
-            return (target, previous)
+            return target
+        
+    def traverse(self):
+        if self.is_empty():
+            return
+        temp = self.head
+        while temp is not None:
+            yield temp
+            temp = temp.next
 
 
 
@@ -127,6 +139,21 @@ class SLL(LL):
             target.next = None
             self.len -= 1
 
+    def search(self, element):
+        if self.head is None:
+            print("Error: list is empty")
+            return (None, None)
+        target = self.head
+        previous = None
+        while target is not None and target.element != element:
+            previous = target
+            target = target.next
+        if target is None:
+            print("Error: not found element")
+            return (target, previous)
+        else:
+            return (target, previous)
+
     def __getitem__(self, item):
         n = self.head
         while n is not None and item > 0:
@@ -142,3 +169,44 @@ class SLL(LL):
             yield node.element
             node = node.next
     
+
+
+class DLL(LL):
+    def add_first(self, data):
+        node = DLLNode(data)
+        if self.is_empty():
+            self.tail = node
+        node.next = self.head
+        self.head = node
+        self.len += 1
+    
+    def add_last(self, data):
+        node = DLLNode(data)
+        if self.is_empty():
+            self.head = node
+            self.tail = node
+            self.len += 1
+        else:
+            node.prev = self.tail
+            self.tail.next = node
+            self.tail = node
+            self.len += 1
+
+    def del_first(self):
+        pass
+
+    def del_last(self):
+        pass
+
+    def del_this(self, node):
+        if node == self.head:
+            del_first()
+            self.len -= 1
+        if node == self.tail:
+            del_last()
+            self.len -= 1
+        node.prev.next = node.next
+        node.next.prev = node.prev
+        node.prev = None
+        node.next = None
+        self.len -= 1
