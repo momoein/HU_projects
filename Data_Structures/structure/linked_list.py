@@ -1,16 +1,35 @@
-class SLLNode:
-    def __init__(self, element):
-        self.element = element
+class SNode:
+    def __init__(self):
+        self.next = None
+
+    def del_next(self):
         self.next = None
 
 
-
-class DLLNode:
-    def __init__(self, element):
-        self.element = element
+class DNode:
+    def __init__(self):
+        self.prev = None
+        self.next = None
+    
+    def del_prev(self):
+        self.prev = None
+    def del_next(self):
+        self.next = None
+    def del_pointers(self):
         self.prev = None
         self.next = None
 
+
+class SLLNode(SNode):
+    def __init__(self, element):
+        super().__init__(self, element)
+        self.element = element
+
+
+class DLLNode(DNode):
+    def __init__(self, element):
+        super().__init__(self, element)
+        self.element = element
 
 
 class LL:
@@ -193,10 +212,10 @@ class DLL(LL):
 
     def del_this(self, node):
         if node == self.head:
-            del_first()
+            self.del_last()
             self.len -= 1
         if node == self.tail:
-            del_last()
+            self.del_last()
             self.len -= 1
         node.prev.next = node.next
         node.next.prev = node.prev
