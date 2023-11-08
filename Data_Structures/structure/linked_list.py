@@ -64,16 +64,16 @@ class LL:
 
 
 class SLL(LL):
-    def add_first(self, data):
-        node = SLLNode(data)
+    def add_first(self, NodeType, *parametr):
+        node = self.create_node(NodeType, *parametr)
         if self.is_empty():
             self.tail = node
         node.next = self.head
         self.head = node
         self.len += 1
 
-    def add_last(self, data):
-        node = SLLNode(data)
+    def add_last(self, NodeType, *parametr):
+        node = self.create_node(NodeType, *parametr)
         if self.is_empty():
             self.head = node
             self.tail = node
