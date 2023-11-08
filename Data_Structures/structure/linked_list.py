@@ -131,13 +131,13 @@ class SLL(LL):
             target.next = None
             self.len -= 1
 
-    def search(self, element):
+    def search(self, attrname, value):
         if self.head is None:
             print("Error: list is empty")
             return (None, None)
         target = self.head
         previous = None
-        while target is not None and target.element != element:
+        while target is not None and getattr(target, attrname) != value:
             previous = target
             target = target.next
         if target is None:
