@@ -99,7 +99,7 @@ class SLL(LL):
 
     def del_last(self):
         if self.is_empty():
-            print(f"Error {__name__}: list is empty")
+            print(f"Error {self.del_last.__name__}: list is empty")
             return
         elif self.head.next is None:
             self.head = None
@@ -115,12 +115,12 @@ class SLL(LL):
             else:
                 temp = temp.next
     
-    def delete(self, element):
-        target, previous = self.search(element)
+    def delete(self, attrname, srch_value):
+        target, previous = self.search(attrname, srch_value)
         if target is None and previous is None:
-            print(f"Error: list {__name__} is empty")
+            print(f"Error {self.delete.__name__}(): list is empty")
         elif target is None and previous is not None:
-            print(f"Error: element {element} not found")
+            print(f"Error {self.delete.__name__}(): {srch_value} not found")
         elif target is not None and previous is None:
             self.head = target.next
             target.next = None
