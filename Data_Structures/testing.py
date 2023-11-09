@@ -1,4 +1,4 @@
-from structure.linked_list import SLL
+from toolbox.structure.linked_list import SLL
 from tasks.students import *
 from tasks.students2 import *
 from toolbox.sort import insertion_sort
