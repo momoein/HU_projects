@@ -9,3 +9,14 @@ def insertion_sort(array):
             i -= 1
         array[i] = key
     return array
+
+def bubble_sort(array):
+    for i in range(len(array)):
+        j = 0
+        while j+1 < len(array):
+            if array[j] > array[j+1]:
+                temp = array[j+1]
+                array[j+1] = array[j]
+                array[j] = temp
+            j += 1
+    return array
