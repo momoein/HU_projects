@@ -36,36 +36,38 @@ def selection_sort(array):
         array[min] = temp
     return array
 
-# def merge_sort(array): # it have bug
-#     n = len(array)
-#     if n == 1:
-#         return array
-#     m = n // 2
-#     L = array[:m]
-#     R = array[m:]
+def merge_sort(array):
+    n = len(array)
+    if n == 1:
+        return array
+    # split array
+    m = n // 2
+    L = array[:m]
+    R = array[m:]
+    # sort and merge
+    L_sorted = merge_sort(L)
+    R_sorted = merge_sort(R)
+    return merge(L_sorted, R_sorted)
 
-#     merge_sort(L)
-#     merge_sort(R)
-#     merge(L, R)
-
-# def merge(L, R):
-#     n, m = len(L), len(R)
-#     i, j = 0, 0
-#     array = [None for i in range(n+m)]
-#     for k in range(0, n+m):
-#         if i == n:
-#             i_value = R[j] + 1
-#         else:
-#             i_value = L[i]
-#         if j == m:
-#             j_value = L[i] + 1
-#         else:
-#             j_value = R[j]
-
-#         if i_value <= j_value:
-#             array[k] = i_value
-#             i += 1
-#         if i_value > j_value:
-#             array[k] = j_value
-#             j += 1
-#     return array
+def merge(L, R):
+    n, m = len(L), len(R)
+    i, j = 0, 0
+    array = [None for i in range(n+m)]
+    for k in range(0, n+m):
+        # handle the last index
+        if i == n:
+            i_value = R[j] + 1
+        else:
+            i_value = L[i]
+        if j == m:
+            j_value = L[i] + 1
+        else:
+            j_value = R[j]
+        # comparison two the least element of arrays
+        if i_value <= j_value:
+            array[k] = i_value
+            i += 1
+        if i_value > j_value:
+            array[k] = j_value
+            j += 1
+    return array
