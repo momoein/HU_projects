@@ -1,4 +1,4 @@
-from toolbox.structure.linked_list import SLL
+from toolbox.linked_list import SLL
 
 
 class Students:

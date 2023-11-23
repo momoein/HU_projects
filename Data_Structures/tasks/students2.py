@@ -1,4 +1,4 @@
-from toolbox.structure.linked_list import SLL, SNode
+from toolbox.linked_list import SLL, SNode
 
 
 class Students(SLL):
