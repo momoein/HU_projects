@@ -22,13 +22,11 @@ class DNode:
 
 class SLLNode(SNode):
     def __init__(self, element):
-        super().__init__(self, element)
         self.element = element
 
 
 class DLLNode(DNode):
     def __init__(self, element):
-        super().__init__(self, element)
         self.element = element
 
 
