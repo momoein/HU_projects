@@ -1,6 +1,5 @@
-import math
 import pygame
-from p import Graphic, Robot , Ultrasonic, _Robot , _Ultrasonic
+from p import Graphic, Robot , Ultrasonic
 
 Map = (600 , 1200)
 
@@ -8,11 +7,11 @@ gtx = Graphic(Map , "sosk.png" , "maze2.png")
 
 start = (100 , 100)
 
-robot = _Robot(start , 0.005 * 3779.52)
+robot = Robot(start , 0.01 * 3779.52)
 
-sensor_range = 100 #, math.radians(90)
+sensor_range = 120
 
-ultra = _Ultrasonic(sensor_range , gtx.map)  
+ultra = Ultrasonic(sensor_range , gtx.map)  
 
 dt = 0
 last_time = pygame.time.get_ticks()
@@ -28,7 +27,6 @@ while runnin:
             
     dt = (pygame.time.get_ticks()-last_time)/1000
     last_time = pygame.time.get_ticks()
-    
     
     gtx.map.blit(gtx.map_img , (0,0))
     robot.kinameter(dt)
