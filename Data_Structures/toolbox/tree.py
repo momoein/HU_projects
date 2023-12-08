@@ -85,6 +85,7 @@ class BST:
     def is_empty(self):
         return not self.root
 
+
     def insert(self, data):
         node = BSTNode(data)
         if self.is_empty():
@@ -104,7 +105,8 @@ class BST:
                 else:
                     temp.left = node
                     return
-        
+
+
     def inorder(self, node):
         if node is None:
             return
@@ -112,6 +114,7 @@ class BST:
             self.inorder(node.left)
             print(node.data, end="  ")
             self.inorder(node.right)
+
 
     def postorder(self, node):
         if node is None:
@@ -121,6 +124,7 @@ class BST:
             self.postorder(node.right)
             print(node.data)
 
+
     def preorder(self, node):
         if node is None:
             return
@@ -128,7 +132,8 @@ class BST:
             print(node.data)
             self.preorder(node.left)
             self.preorder(node.right)
-            
+
+
     def level_order(self, root):
         Q = Queue()
         Q.enqueue(root)
@@ -140,18 +145,21 @@ class BST:
             if temp.right is not None:
                 Q.enqueue(temp.right)
 
+
     def height(self, node):
         if node is None:
             return -1
         l_height = self.height(node.left)
         r_height = self.height(node.right)
         return max(l_height, r_height) + 1
-    
+
+
     def search(self, root, key, recursive=False):
         if recursive:
             return self._search_recursive(root, key)
         else:
             return self._search_iterative(root, key)
+
 
     def _search_recursive(self, node, key):
         if node is None:
@@ -162,6 +170,7 @@ class BST:
             return self._search_recursive(node.right, key)
         else:
             return self._search_recursive(node.left, key)
+
 
     def _search_iterative(self, node, key):
         if node is None:
@@ -174,77 +183,71 @@ class BST:
             else:
                 node = node.left
 
+
     def parent_search(self, root, key):
+        if root is None:
+            raise Exception("Tree is empty")
+        elif root.data == key:
+            raise Exception("root does have parent !!")
+        
         papa = root
-        while papa is not None:
-            if papa.data == key:
-                return None
-            if papa.data < key:
+        while papa:
+            if papa.left is not None and papa.left.data == key:
+                return (papa, "L")
+            elif papa.right is not None and papa.right.data == key:
+                return (papa, "R")
+            elif key > papa.data:
                 papa = papa.right
-            elif papa.data > key:
+            elif key < papa.data:
                 papa = papa.left
-            elif papa.left.data == key or papa.right.data == key:
-                return papa
 
-    def min_node(self, node):
-        if node is None:
+        return (papa, None)
+            
+
+    def min_node(self, root):
+        if root is None:
             return
-        while node.left is not None:
-            node = node.left
-        return node
-        
-    # def delete(self, node):
-    #     if node is None:
-    #         return "tree is empty"
-    #     if node.left is None:
-    #         node.data = node.right.data if node.right is not None else None
-    #         return self.delete(node.right)
-    #     if node.right is None:
-    #         node.data = node.left.data if node.left is not None else None
-    #         return self.delete(node.left)
-    #     if node.left is not None and node.right is not None:
-    #         right_smallest = self.min_node(node.right)
-    #         node.data = right_smallest.data
-    #         return self.delete(right_smallest)
-
-
-    def _delete(self, parent, child):
-        if child.left is not None:
-            child = child.left
-            return self._delete(parent.right)
-
-    
-    # def delete(self, root, key):
-    #     parent = self.parent_search(root, key)
-    #     if parent is None:
-    #         return 
-    #     child = self.find_child(parent , key)
-    #     count = self.child_count(child)
-    #     if count == 0:
-    #         child = None
-    #     if count == 1:
-    #         ...
-        
-
-
+        parent = None
+        while root.left is not None:
+            parent = root
+            root = root.left
+        return (parent, root)
         
     
-    def find_child(self, node, key):
-        if node.left.data == key:
-            return node.left
-        elif node.right.data == key:
+    def delete(self, root, key):
+        if root.data == key:
+            self._delete_root(root)
+            return
+        parent, pointer = self.parent_search(root, key)
+
+        if parent is None:
+            return 
+        if pointer == "L":
+            parent.left = self.succesor(parent.left)
+        elif pointer == "R":
+            parent.right = self.succesor(parent.right)
+        
+
+    def succesor(self, node):
+        if node.left is not None and node.right is not None:
+            p, right_min = self.min_node(node.right)
+            node.data = right_min.data
+            p.left = right_min.right
+            return node
+        
+        elif node.left is None:
             return node.right
-        else:
-            return None
-    
-    def child_count(self, node):
-        count = 0
-        if node.left is not None:
-            count += 1
-        if node.right is not None:
-            count += 1
-        return count
+        elif node.right is None:
+            return node.left
 
+
+    def _delete_root(self, root):
+        p, nearest_big = self.min_node(root.right)
+        root.data = nearest_big.data
+        p.left = nearest_big.right
+        
+
+     
 
     
 class AVLNode:
