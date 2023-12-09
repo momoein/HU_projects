@@ -67,7 +67,6 @@ class Binary_Tree:
     def __init__(self):
         self.root = None
 
-    
 
 
 # binary search tree 
@@ -76,6 +75,7 @@ class BSTNode:
         self.data = data
         self.left = None
         self.right = None
+
 
 
 class BST:
@@ -247,9 +247,8 @@ class BST:
         p.left = nearest_big.right
         
 
-     
 
-    
+# AVL Tree
 class AVLNode:
     def __init__(self, data):
         self.data = data
@@ -271,18 +270,43 @@ class AVL(Tree):
         elif data > root.data:
             if root.right is None:
                 root.right = self.creat_node(AVLNode ,data)
-                root.height += 1
+                root.height = self.live_height(root)
             else:
                 self.insert(root.right, data)
-                root.height += 1
+                root.height = self.live_height(root)
 
         elif data < root.data:
             if root.left is None:
                 root.left = self.creat_node(AVLNode ,data)
-                root.height += 1
+                root.height = self.live_height(root)
             else:
                 self.insert(root.left, data)
-                root.height += 1
+                root.height = self.live_height(root)
+        
+
+    def height(self, root):
+        if root is None:
+            return -1
+        LH = self.height(root.left)
+        RH = self.height(root.right)
+        return max(LH, RH) + 1
+
+    def live_height(self, root):
+        if root is not None:
+            if root.left is None:
+                LH = -1
+            else:
+                LH = root.left.height
+            if root.right is None:
+                RH = -1
+            else:
+                RH = root.right.height
+            return max(LH, RH) + 1
+
+
+    def get_balance_factor(self, root):
+        if root is not None:
+            return self.height(root.left) - self.height(root.right)
 
 
     def inorder(self, root):
@@ -293,4 +317,14 @@ class AVL(Tree):
         self.inorder(root.right)
     
 
+    def level_order(self, root):
+        Q = Queue()
+        Q.enqueue(root)
+        while Q.len > 0:
+            temp = Q.dequeue()
+            print(temp.data, f"h:{temp.height}", end=" , ")
+            if temp.left is not None:
+                Q.enqueue(temp.left)
+            if temp.right is not None:
+                Q.enqueue(temp.right)
     
