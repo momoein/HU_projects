@@ -36,7 +36,7 @@ class Tree:
 
 
 
-def construct_bt(pre, ino, root):
+def construct_bt(pre, ino):
     if len(ino) != len(pre):
         print('Error ino and pre is not match')
         return 
@@ -47,8 +47,8 @@ def construct_bt(pre, ino, root):
     l_ino, l_pre, r_ino, r_pre = split_tree(pre, ino)
 
     root = BTNode(pre[0])
-    root.left = construct_bt(l_pre, l_ino, root.left)
-    root.right = construct_bt(r_pre, r_ino, root.right)
+    root.left = construct_bt(l_pre, l_ino)
+    root.right = construct_bt(r_pre, r_ino)
 
     return root
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     ino = [8, 4, 10, 9, 11, 2, 5, 1, 6, 3, 7]
 
     t = Tree()
-    t.root = construct_bt(pre, ino, t.root)
+    t.root = construct_bt(pre, ino)
     
     t.preorder(t.root)
     print()
