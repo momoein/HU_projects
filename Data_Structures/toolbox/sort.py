@@ -1,3 +1,5 @@
+from toolbox.heap import max_heapify, build_heap
+
 
 def insertion_sort(array):
     n = len(array)
@@ -49,6 +51,7 @@ def merge_sort(array):
     R_sorted = merge_sort(R)
     return merge(L_sorted, R_sorted)
 
+
 def merge(L, R):
     n, m = len(L), len(R)
     i, j = 0, 0
@@ -70,4 +73,18 @@ def merge(L, R):
         if i_value > j_value:
             array[k] = j_value
             j += 1
+    return array
+
+
+def heap_sort(array, k=None):
+    size = len(array) - 1
+    if k is None:
+        k = size
+
+    build_heap(array)
+    while size > 0 and k > 0:
+        array[0], array[size] = array[size], array[0]
+        max_heapify(array, size, 0)
+        size -= 1
+        k -= 1
     return array
