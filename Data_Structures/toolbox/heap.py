@@ -25,27 +25,27 @@ def increase_key(array, i, key):
             i = parent(i)
 
 
-def max_heapify(array, i):
+def max_heapify(array, size, i):
     l = left(i)
     r = right(i)
     largest = i
 
-    if l < len(array) and array[l] > array[i]:
+    if l < size and array[l] > array[i]:
         largest = l
     
-    if r < len(array) and array[r] > array[largest]:
+    if r < size and array[r] > array[largest]:
         largest = r
     
     if largest != i:
         # swap
         array[i], array[largest] = array[largest], array[i]
-        max_heapify(array, largest)
+        max_heapify(array, size, largest)
         
     
 def build_heap(array):
     size = len(array)
     for i in range(size//2, -1, -1):
-        max_heapify(array, i)
+        max_heapify(array, size, i)
 
 
 class MaxHeap:
@@ -66,21 +66,9 @@ class MaxHeap:
         build_heap(self.array)
     
     def heapify(self, i):
-        max_heapify(self.array, i)
+        max_heapify(self.array, len(self.array), i)
 
     def show(self):
         print(self.array)
 
     
-
-        
-
-a = [1, 2, 3, 4, 5, 6, 7]
-build_heap(a)
-print(a)
-h = MaxHeap(a)
-h.insert(10)
-print(h.array)
-h.delete()
-h.show()
-
