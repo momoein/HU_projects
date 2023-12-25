@@ -88,3 +88,22 @@ def heap_sort(array, k=None):
         size -= 1
         k -= 1
     return array
+
+
+
+def count_sort(array, max):
+    a, m = array, max
+    c = [0 for i in range(m+1)] 
+    b = [0 for i in range(len(array) + 1)]
+
+    for i in range(len(a)):
+        c[a[i]] += 1
+    
+    for i in range(1, len(c)):
+        c[i] += c[i-1]
+    
+    for i in range(len(a)-1, -1, -1):
+        b[c[a[i]]] = a[i]
+        c[a[i]] -= 1
+
+    return b[1:]
