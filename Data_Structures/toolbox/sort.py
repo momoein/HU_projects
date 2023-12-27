@@ -1,5 +1,5 @@
 from toolbox.heap import max_heapify, build_heap
-
+from random import randint
 
 def insertion_sort(array):
     n = len(array)
@@ -140,3 +140,28 @@ def which_digit(integer, digit):
     integer %= base
     base /= 10
     return int(integer // base)
+
+
+
+def partition(array, low, high):
+    # randomized partition
+    i = randint(low, high)
+    array[i], array[high] = array[high], array[i]
+    
+    pivot = array[high]
+    i = low - 1
+
+    for j in range(low, high):
+        if array[j] <= pivot:
+            i = i + 1
+            (array[i], array[j]) = (array[j], array[i])
+
+    (array[i + 1], array[high]) = (array[high], array[i + 1])
+    return i + 1
+
+
+def quick_sort(array, low, high):
+    if low < high:
+        pi = partition(array, low, high)
+        quick_sort(array, low, pi - 1)
+        quick_sort(array, pi + 1, high)
