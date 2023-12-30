@@ -328,3 +328,21 @@ class AVL(Tree):
             if temp.right is not None:
                 Q.enqueue(temp.right)
     
+
+    def insert2(self, root, data):
+        if self.is_empty():
+            self.root = self.creat_node(AVLNode ,data)
+            return 
+        
+        if root is None:
+            root = self.creat_node(AVLNode ,data)
+            return root
+        
+        elif data > root.data:
+            root.right = self.insert2(root.right, data)
+            root.height = self.live_height(root)
+            return root
+        elif data < root.data:
+            root.left = self.insert2(root.left, data)
+            root.height = self.live_height(root)
+            return root
