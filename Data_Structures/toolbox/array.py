@@ -1,8 +1,7 @@
 class Array:
-    def __init__(self, size: int, dtype: type=None):
-        self.__array = [dtype] * abs(size)
+    def __init__(self, size: int=0, object=None):
+        self.__array = [object] * abs(size)
         self.__len = abs(size)
-        self.__dtype = dtype
         
     def get(self):
         return self.__array 
@@ -22,6 +21,28 @@ class Array:
     def clear(self):
         self.__array = [None for i in range(self.__len)]
 
+    def reverse(self):
+        i = 0
+        j = self.__len - 1
+        while True:
+            if i != j:
+                self.__array[i], self.__array[j] = (
+                    self.__array[j], self.__array[i]
+                )
+            if i > j:
+                return
+            i += 1
+            j -= 1
+
+    def __iter__(self):
+        for i in self.__array:
+            yield i
+
+    def __contains__(self, key):
+        for i in self.__array:
+            if i == key:
+                return True
+        return False
 
 
 class DynamicArray:
@@ -56,13 +77,22 @@ class DynamicArray:
 
 
 if __name__ == "__main__":
-    arr = DynamicArray(5, dtype=0)
-    arr.extend()
-    arr[1] = 9
-    for i, v in enumerate(arr):
-        print(i, v)
-    a = Array(9, dtype=0)
-    print(a)
-    a.clear()
-    print(a)
+    # arr = DynamicArray(5, dtype=0)
+    # arr.extend()
+    # arr[1] = 9
+    # for i, v in enumerate(arr):
+    #     print(i, v)
+    # a = Array(9, dtype=0)
+    # print(a)
+    # a.clear()
+    # print(a)
+
+    arr = Array(10, 0)
+    # for i, v in enumerate(arr):
+    #     arr[i] = i
+    arr[4] = ""
+    print(arr)
+    arr.reverse()
+    print(arr)
     
+
