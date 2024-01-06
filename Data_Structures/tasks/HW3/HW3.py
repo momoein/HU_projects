@@ -47,15 +47,15 @@ class Tournament:
         self.teams = self.initial(names_list, results)
 
 
-    def initial(self, teams_name, results):
-        teams = self.build_table(teams_name)
+    def initial(self, names_list, results):
+        teams = self.build_table(names_list)
         self.initial_result(results, teams)
         array = [teams[i] for i in teams]
         return array
 
 
     def build_table(self, array):
-        table = {}
+        table = dict()
         for team in array:
             table.update({team : Team(team)})
         return table
