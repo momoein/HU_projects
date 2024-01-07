@@ -1,4 +1,7 @@
 from sort import *
+from data_structure import OpenHashTable
+
+
 
 class Team:
     def __init__(self, name):
@@ -52,12 +55,12 @@ class Tournament:
         self.initial_result(results, teams)
         array = [teams[i] for i in teams]
         return array
-
+    
 
     def build_table(self, array):
-        table = dict()
+        table = OpenHashTable(len(array)) # my lovely hash table
         for team in array:
-            table.update({team : Team(team)})
+            table.update(team, Team(team))
         return table
 
 
@@ -65,27 +68,27 @@ class Tournament:
         for i in results:
             self.add_result(i, table)
 
-    
+
     def add_result(self, result, table):
         t1, t2 = self.detect_result(result)
-        team1 = table[t1["name"]]
-        team2 = table[t2["name"]]
-        team1.update_details(t1["zade"], t1["khorde"])
-        team2.update_details(t2["zade"], t2["khorde"])
+        team1 = table[t1[0]]
+        team2 = table[t2[0]]
+        team1.update_details(t1[1], t1[2])
+        team2.update_details(t2[1], t2[2])
 
 
     def detect_result(self, result):
         result = result.split('#')
-        team1 = {
-            "name" : result[0],
-            "zade" : int(result[1].split("@")[0]),
-            "khorde" : int(result[1].split("@")[1]),
-        }
-        team2 = {
-            "name" : result[2],
-            "zade" : int(result[1].split("@")[1]),
-            "khorde" : int(result[1].split("@")[0]),
-        }
+        team1 = (
+            result[0], # name 
+            int(result[1].split("@")[0]), # zade
+            int(result[1].split("@")[1]), # khorde
+        )
+        team2 = (
+            result[2], # name
+            int(result[1].split("@")[1]), # zade
+            int(result[1].split("@")[0]), # khorde
+        )
         return team1, team2
 
     
