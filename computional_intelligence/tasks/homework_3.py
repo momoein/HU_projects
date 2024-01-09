@@ -16,7 +16,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 input_size = X.shape[1]
 output_size = len(np.unique(y))
-hidden_layer_size = (9, )
+hidden_layer_size = (2, )
 
 
 def create_classifier(ind):
