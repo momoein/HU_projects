@@ -28,6 +28,7 @@ class Array:
         self.__array = [None for i in range(self.__len)]
 
     def reverse(self):
+        """Reverse the elements of the list in place."""
         i = 0
         j = self.__len - 1
         while True:
