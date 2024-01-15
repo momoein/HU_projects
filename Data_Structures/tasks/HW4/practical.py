@@ -21,9 +21,9 @@ class TST:
         if root is None:
             return False
         #
-        if root.data and ord(key[0]) < ord(root.data): 
+        if ord(key[0]) < ord(root.data): 
             return self.search(root.left, key[:])
-        elif root.data and ord(key[0]) > ord(root.data): 
+        elif ord(key[0]) > ord(root.data): 
             return self.search(root.right, key[:])
         #
         else:
@@ -76,35 +76,60 @@ class TST:
                         word = word[1:]
         #
         return root
+    
+    # End of class
 
 
+def traverseTSTUtil(root, buffer, depth): 
+    if root: 
+        traverseTSTUtil(root.left, buffer, depth) 
+        buffer[depth] = root.data 
+        if root.isend: 
+            print("".join(buffer[:depth+1])) 
+        traverseTSTUtil(root.eq, buffer, depth+1) 
+        traverseTSTUtil(root.right, buffer, depth) 
 
+
+def traverseTST(root): 
+    buffer = [''] * 50
+    traverseTSTUtil(root, buffer, 0) 
+
+
+def show_same_prefix_Util(root, key, depth):
+    if root is None:
+        return False
+    #
+    if ord(key[0]) < ord(root.data): 
+        return show_same_prefix_Util(root.left, key[:], depth)
+    elif ord(key[0]) > ord(root.data): 
+        return show_same_prefix_Util(root.right, key[:], depth)
+    #
+    else:
+        if len(key) > 1:
+            return show_same_prefix_Util(root.eq, key[1:], depth+1)
+        if len(key) == 1:
+            buffer = [''] * 50
+            traverseTSTUtil(root.eq, buffer, depth)
+
+def show_same_prefix(root, word):
+    show_same_prefix_Util(root, key=word, depth=0)
+
+                
             
-
-
-
-
             
-        
-
-
-
-        
-
-
-            
-
 
 
 tst = TST()
 
-tst.root = tst.insert(tst.root, "abc")
-tst.root = tst.insert(tst.root, "acd")
-tst.root = tst.insert(tst.root, "1cd")
-print(tst.search(tst.root, "acd"))
-print(tst.search(tst.root, "acd"))
-print(tst.search(tst.root, "1cd"))
-
-
-
+tst.root = tst.insert(tst.root, "0")
+tst.root = tst.insert(tst.root, "01")
+tst.root = tst.insert(tst.root, "012")
+tst.root = tst.insert(tst.root, "0123")
+tst.root = tst.insert(tst.root, "01234")
+tst.root = tst.insert(tst.root, "012345")
+# print(tst.search(tst.root, "012"))
+# print(tst.search(tst.root, "acd"))
+# print(tst.search(tst.root, "1cd"))
+# traverseTST(tst.root)
+show_same_prefix(tst.root, "012")
 
