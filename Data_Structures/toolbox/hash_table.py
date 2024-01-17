@@ -63,10 +63,11 @@ class OpenHashTable:
 
 
 class DynamicHash:
-    def __init__(self, size: int=0) -> None:
-        self.__arr = Array(size)
-        self.__size = size
+    def __init__(self) -> None:
+        self.__arr = Array()
+        self.__size = 0
         self.__useful = 0
+        ...
 
     def __h1(self, key):
         """return int(m * (a*key % 1))"""
@@ -102,7 +103,9 @@ class DynamicHash:
         FT: Full_Threshold = 0.75
         """
         n = self.__useful
-        m = self.__size
+        m = self.__size  
+        if m == 0:
+            return True
         return n/m >= 0.75
     
     def __is_et(self):
@@ -113,14 +116,45 @@ class DynamicHash:
         m = self.__size
         return n/m <= 0.25
 
+    def __expand(self): 
+        m = self.__size
+        if m == 0:
+            self.__arr = Array(1)
+            self.__size = 1
+            return None
+        #
+        if self.__is_ft():
+            sll = SLL()
+            for i in range(m):
+                item = self.__arr[i]
+                if item and item != "deleted":
+                    sll.append(item)
+            #
+            m *= 2
+            self.__arr = Array(m)
+            self.__size = m
+            for node in sll:
+                key = node.data.key
+                value = node.data.value
+                self[key] = value
+            # print("len", len(sll), "size", len(self.__arr))
+            #
+            for i in range(len(sll)):
+                sll.remove()
+            return None
+        ...
+ 
+    def __compress(self): ...
+
     def __is_deleted(self, index):
         """return True if table[i] == 'deleted' """
         return self.__arr[index] == "deleted" 
 
-    def search(self, key): 
+    def __search(self, key): 
+        """return index of the key if find it"""
         m = self.__size
         arr = self.__arr
-        index = ...
+        index = 0
         #
         for i in range(m):
             index = self._hash(key, i)
@@ -128,43 +162,60 @@ class DynamicHash:
             if item and item != "deleted":
                 if item.key == key:
                     return index
-        #
         return None
+        ...
 
-    def insert(self, key, value): ...
-
-    def update(self, key): ...
-
-    def delete(self): ...
-
-    def __setitem__(self, key, value): 
+    def insert(self, key, value): 
+        self.__expand()
         m = self.__size
         arr = self.__arr
-        index = ...
+        index = 0
+        #
         for i in range(m):
             index = self._hash(key, i)
             if arr[index] == None or self.__is_deleted(index):
                 arr[index] = HashNode(key, value)
+                self.__useful += 1
                 return None
         print(f"not found any place for key: {key}")
         # raise OverflowError("DynamicHash overflow")
+        ...
+
+    def update(self, key, value): 
+        index = self.__search(key)
+        if index:
+            item = self.__arr[index]
+            item.value = value
+        ...
+
+    def delete(self): ...
+
+    def __setitem__(self, key, value): 
+        self.insert(key, value)
+        ...
     
     def __getitem__(self, key):
-        index = self.search(key)
+        index = self.__search(key)
         if index:
             item = self.__arr[index]
             return item.value
         raise KeyError(key)
-
-    def __delitem__(self, key): 
-        
         ...
 
-    # def __contains__(self, item): ...
+    def __delitem__(self, key): ...
+
+    def __contains__(self, key): 
+        index = self.__search(key)
+        if index:
+            return True
+        else:
+            return False
+        ...
 
     def __iter__(self): 
         for item in self.__arr:
             if item and item != "deleted":
                 yield item.key
+        ...
 
     # def __missing__(self, key): ...
