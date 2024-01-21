@@ -67,7 +67,7 @@ class DynamicHash:
         self.__arr = Array()
         self.__size = 0
         self.__useful = 0
-        ...
+    ...
 
     def __h1(self, key):
         """return int(m * (a*key % 1))"""
@@ -103,9 +103,7 @@ class DynamicHash:
         FT: Full_Threshold = 0.75
         """
         n = self.__useful
-        m = self.__size  
-        if m == 0:
-            return True
+        m = self.__size   
         return n/m >= 0.75
     
     def __is_et(self):
@@ -133,22 +131,38 @@ class DynamicHash:
             m *= 2
             self.__arr = Array(m)
             self.__size = m
+            self.__useful = 0
             for node in sll:
                 key = node.data.key
                 value = node.data.value
                 self[key] = value
             # print("len", len(sll), "size", len(self.__arr))
-            #
-            for i in range(len(sll)):
-                sll.remove()
-            return None
-        ...
+            sll.clear()
+    ...
  
-    def __compress(self): ...
-
-    def __is_deleted(self, index):
-        """return True if table[i] == 'deleted' """
-        return self.__arr[index] == "deleted" 
+    def __compress(self): 
+        m = self.__size
+        if m == 0:
+            return None
+        #
+        if self.__is_et():
+            sll = SLL()
+            for i in range(m):
+                item = self.__arr[i]
+                if item and item != "deleted":
+                    sll.append(item)
+            #
+            m //= 2
+            self.__arr = Array(m)
+            self.__size = m
+            self.__useful = 0
+            for node in sll:
+                key = node.data.key
+                value = node.data.value
+                self[key] = value
+            # print("len", len(sll), "size", len(self.__arr))
+            sll.clear()
+    ...
 
     def __search(self, key): 
         """return index of the key if find it"""
@@ -163,7 +177,7 @@ class DynamicHash:
                 if item.key == key:
                     return index
         return None
-        ...
+    ...
 
     def insert(self, key, value): 
         self.__expand()
@@ -173,36 +187,54 @@ class DynamicHash:
         #
         for i in range(m):
             index = self._hash(key, i)
-            if arr[index] == None or self.__is_deleted(index):
+            if arr[index] == None or arr[index] == "deleted":
                 arr[index] = HashNode(key, value)
                 self.__useful += 1
                 return None
         print(f"not found any place for key: {key}")
-        # raise OverflowError("DynamicHash overflow")
-        ...
+        raise OverflowError("DynamicHash overflow")
+    ...
 
     def update(self, key, value): 
         index = self.__search(key)
         if index:
             item = self.__arr[index]
             item.value = value
-        ...
+    ...
 
-    def delete(self): ...
+    def delete(self, key): 
+        self.__compress()
+        index = self.__search(key)
+        if index:
+            self.__arr[index] = "deleted"
+            self.__useful -= 1
+    ...
 
-    def __setitem__(self, key, value): 
-        self.insert(key, value)
-        ...
-    
-    def __getitem__(self, key):
+    def get(self, key):
         index = self.__search(key)
         if index:
             item = self.__arr[index]
             return item.value
         raise KeyError(key)
-        ...
+    ...
 
-    def __delitem__(self, key): ...
+    def clear(self):
+        for i in self:
+            self.delete(i)
+        self.__init__()
+        
+
+    def __setitem__(self, key, value): 
+        self.insert(key=key, value=value)
+    ...
+    
+    def __getitem__(self, key):
+        self.get(key)
+    ...
+
+    def __delitem__(self, key): 
+        self.delete(key)
+    ...
 
     def __contains__(self, key): 
         index = self.__search(key)
@@ -210,12 +242,16 @@ class DynamicHash:
             return True
         else:
             return False
-        ...
+    ...
 
     def __iter__(self): 
         for item in self.__arr:
             if item and item != "deleted":
                 yield item.key
-        ...
+    ...
+
+    def __len__(self):
+        return self.__useful
 
     # def __missing__(self, key): ...
+
