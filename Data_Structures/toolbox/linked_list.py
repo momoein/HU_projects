@@ -342,6 +342,10 @@ class SLL:
         for i in self:
             if key(i) == target:
                 return i
+            
+    def clear(self):
+        while self.head:
+            self.__del_first()
 
     def __getitem__(self, index):
         for i, v in enumerate(self):
