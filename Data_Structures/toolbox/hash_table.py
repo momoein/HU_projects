@@ -75,12 +75,10 @@ class DynamicHash:
         m = self.__size
         return int(m * (a*key % 1))
     
-    def __h2(self, key, func=None):
+    def __h2(self, key):
         """return an odd number"""
         m = self.__size
-        if func is None:
-            func = lambda x: int(x % m)
-        return 2 * func(key) + 1 
+        return 2 * int(key % m) + 1 
     
     def __get_key_as_integer(self, key): 
         k = 0
@@ -191,13 +189,13 @@ class DynamicHash:
                 arr[index] = HashNode(key, value)
                 self.__useful += 1
                 return None
-        print(f"not found any place for key: {key}")
+        # print(f"not found any place for key: {key}")
         raise OverflowError("DynamicHash overflow")
     ...
 
     def update(self, key, value): 
         index = self.__search(key)
-        if index:
+        if index is not None:
             item = self.__arr[index]
             item.value = value
     ...
@@ -205,14 +203,14 @@ class DynamicHash:
     def delete(self, key): 
         self.__compress()
         index = self.__search(key)
-        if index:
+        if index is not None:
             self.__arr[index] = "deleted"
             self.__useful -= 1
     ...
 
     def get(self, key):
         index = self.__search(key)
-        if index:
+        if index is not None:
             item = self.__arr[index]
             return item.value
         raise KeyError(key)
@@ -222,14 +220,14 @@ class DynamicHash:
         for i in self:
             self.delete(i)
         self.__init__()
-        
+    ...
 
     def __setitem__(self, key, value): 
         self.insert(key=key, value=value)
     ...
     
     def __getitem__(self, key):
-        self.get(key)
+        return self.get(key)
     ...
 
     def __delitem__(self, key): 
@@ -238,7 +236,7 @@ class DynamicHash:
 
     def __contains__(self, key): 
         index = self.__search(key)
-        if index:
+        if index is not None:
             return True
         else:
             return False
