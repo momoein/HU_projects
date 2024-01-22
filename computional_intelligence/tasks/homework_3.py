@@ -1,7 +1,7 @@
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import StandardScaler
 from deap import base, creator, tools
 import numpy as np
  
@@ -19,45 +19,45 @@ output_size = len(np.unique(y))
 hidden_layer_size = (2, )
 
 
-def create_classifier(ind):
-    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_size, 
+def mlp_classifier(best):
+    mlp = MLPClassifier(hidden_layer_sizes=hidden_layer_size, 
                         activation="logistic", solver="sgd", 
                         max_iter=500, learning_rate_init=0.1
                         )
-    clf.coefs_ = [np.array(ind[0]), np.array(ind[1])]
-    clf.intercepts_ = [np.array(ind[2]), np.array(ind[3])]
-    return clf
+    mlp.coefs_ = [np.array(best[0]), np.array(best[1])]
+    mlp.intercepts_ = [np.array(best[2]), np.array(best[3])]
+    return mlp
 
 
 
-def evaluate(ind):
-    clf = create_classifier(ind)
-    clf.fit(X_train, y_train)
-    accuracy = clf.score(X_test, y_test)
+def evaluate(best):
+    mlp = mlp_classifier(best)
+    mlp.fit(X_train, y_train)
+    accuracy = mlp.score(X_test, y_test)
     return (accuracy, )
 
 
 
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-creator.create("Individual", list, fitness=creator.FitnessMax)
+creator.create("Fitness", base.Fitness, weights=(1.0,))
+creator.create("Individual", list, fitness=creator.Fitness)
 
 toolbox = base.Toolbox()
 toolbox.register("weights", np.random.uniform, -1, 1)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.weights, n=4 * (input_size * hidden_layer_size[0] + output_size))
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.weights, n=1 * (input_size * hidden_layer_size[0] + output_size))
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("mate", tools.cxBlend, alpha=0.9)
 toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=0.2, indpb=0.2)
-toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("select", tools.selTournament, tournsize=2)
 toolbox.register("evalute", evaluate)
 
 
 
 if __name__ == "__main__":
     for i in range(1):
-        population_size = 50
+        pop_size = 75
         generations = 100
 
-        population = toolbox.population(n=population_size)
+        population = toolbox.population(n=pop_size)
         best_individual = tools.selBest(population, k=1)[0]
         best_accuracy = evaluate(best_individual)
 
