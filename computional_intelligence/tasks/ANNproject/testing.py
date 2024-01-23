@@ -2,7 +2,8 @@ import scipy.io
 import numpy as np
 
 
-mat = scipy.io.loadmat("Data.mat")
+path = "D:\\work\\university\\Huni_projects\\computional_intelligence\\tasks\\ANNproject\\Data.mat"
+mat = scipy.io.loadmat(path)
 input_, target_ = mat["Input"], mat["Target"]
 
 fixed_shape_input = [[input_[0][i], input_[1][i]] for i in range(input_.shape[1])]
@@ -14,7 +15,7 @@ y = target_
 class Perceptron:
     def __init__(self, input_size) -> None:
         self.input_size = input_size
-        self.W = np.random.rand(input_size + 1)
+        self.W = np.random.randn(input_size + 1)
         
     def get_net(self, inp): 
         net = np.dot(inp, self.W[1:]) + self.W[0]
@@ -38,9 +39,6 @@ class MLPClassifier_:
         self.layer_size = layer_size
         self.hidden_layers = None
         self.output_layer = None
-        # self.loss = None
-        # self.X_train = None
-        # self.y_train = None
 
     def initial(self, X):
         hidden_layers = []
