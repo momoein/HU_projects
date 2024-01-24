@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from fuzzy_expert.variable import FuzzyVariable
 from fuzzy_expert.rule import FuzzyRule
 from fuzzy_expert.inference import DecompositionalInference

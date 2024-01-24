@@ -1,9 +1,12 @@
 import pygame
-from movment import Graphic, Robot , Ultrasonic
+from code.movment import Graphic, Robot , Ultrasonic
+
 
 Map = (600 , 1200)
 
-gtx = Graphic(Map , "sosk.png" , "maze.png")
+robot_path = ".\\statics\\robot.png"
+maze_path = ".\\statics\\maze1.png"
+gtx = Graphic(Map , robot_path, maze_path)
 
 start = (100 , 100)
 

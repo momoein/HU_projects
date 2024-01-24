@@ -1,7 +1,8 @@
 import pygame
 import math
 import numpy as np
-from fuzz import *
+from code.fuzzy import *
+
 
 
 def distance(point1, point2):
