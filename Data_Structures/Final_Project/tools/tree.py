@@ -18,23 +18,18 @@ class BSTNode:
 
 
 class BST:
-    def __init__(self, insert_key=lambda x: x):
+    def __init__(self):
         self.root = None
-        self.insert_key = insert_key
+
 
     def is_empty(self):
         return not self.root
 
-    def __set_key(self, key): 
-        if key is None:
-            key = self.insert_key
-        return key
 
     def insert(self, key, data, collision_handling=False):
         """BST.insert()
         if `collision_handling == True` return node.data
         """
-        #
         bst_node = BSTNode(key, data)
         if self.is_empty():
             self.root = bst_node
@@ -61,7 +56,7 @@ class BST:
 
 
     
-    def search(self, key, get_node=False, recursive=False):
+    def search(self, key, as_node=False, recursive=False):
         if recursive:
             search_function = self.__search_recursive
         else:
@@ -69,7 +64,7 @@ class BST:
         #
         root = self.root
         node = search_function(root, key)
-        if get_node:
+        if as_node:
             return node
         return node.data
             
@@ -99,37 +94,35 @@ class BST:
                 root = root.left
 
 
-    def __parent_search(self, root, target, key=None):
+    def __parent_search(self, root, key):
         if root is None:
             raise Exception("Tree is empty")
-        elif key(root.data) == target:
+        elif root.key == key:
             raise Exception("root does have parent !!")
         #
-        key = self.__set_key(key)
         papa = root
         while papa:
-            if papa.left is not None and key(papa.left.data) == target:
+            if papa.left and papa.left.key == key:
                 return (papa, "L")
-            elif papa.right is not None and key(papa.right.data) == target:
+            elif papa.right and papa.right.key == key:
                 return (papa, "R")
-            elif target > key(papa.data):
+            elif key > papa.key:
                 papa = papa.right
-            elif target < key(papa.data):
+            elif key < papa.key:
                 papa = papa.left
-        
+        #
         return (papa, None)
         
     
-    def delete(self, target, key=None):
+    def delete(self, key):
         if self.root is None:
             return None
-        key = self.__set_key(key)
         #
-        if key(self.root.data) == target:
+        if self.root.key == key:
             self.root = self.__succesor(self.root)
             return None
         #
-        parent, pointer = self.__parent_search(self.root, target, key)
+        parent, pointer = self.__parent_search(self.root, key)
         if parent is None:
             return None
         if pointer == "L":
