@@ -1,14 +1,16 @@
 from tools.queue import Queue
-
+from functools import partial
 
 # binary search tree 
 class BSTNode:
-    def __init__(self, data):
+    def __init__(self, key, data):
+        self.key = key
         self.data = data
         self.left = None
         self.right = None
     
     def clear(self):
+        self.key = None
         self.data = None
         self.left = None
         self.right = None
@@ -28,68 +30,73 @@ class BST:
             key = self.insert_key
         return key
 
-    def insert(self, data, key=None):
-        node = BSTNode(data)
+    def insert(self, key, data, collision_handling=False):
+        """BST.insert()
+        if `collision_handling == True` return node.data
+        """
+        #
+        bst_node = BSTNode(key, data)
         if self.is_empty():
-            self.root = node
+            self.root = bst_node
             return None
         #
-        key = self.__set_key(key)
-        temp = self.root
+        node = self.root
         while True:
-            if key(data) > key(temp.data):
-                if temp.right:
-                    temp = temp.right
+            if key > node.key:
+                if node.right:
+                    node = node.right
                 else:
-                    temp.right = node
-                    return
-            if key(data) < key(temp.data):
-                if temp.left:
-                    temp = temp.left
+                    node.right = bst_node
+                    return None
+            if key < node.key:
+                if node.left:
+                    node = node.left
                 else:
-                    temp.left = node
-                    return
-            if key(data) == key(temp.data):
+                    node.left = bst_node
+                    return None
+            if key == node.key:
+                if collision_handling:
+                    return node.data 
                 return None
 
 
-
     
-    def search(self, target, key=None, recursive=False):
+    def search(self, key, get_node=False, recursive=False):
         if recursive:
             search_function = self.__search_recursive
         else:
             search_function = self.__search_iterative
-        key = self.__set_key(key)
+        #
         root = self.root
-        node = search_function(root, target, key)
+        node = search_function(root, key)
+        if get_node:
+            return node
         return node.data
             
 
-
-    def __search_recursive(self, node, target, key=None):
-        if node is None:
+    def __search_recursive(self, root, key):
+        if root is None:
             return None
-        key = self.__set_key(key)
-        if target == key(node.data):
-            return node
-        if target > key(node.data):
-            return self._search_recursive(node.right, target, key)
+        # 
+        if key == root.key:
+            return root
+        if key > root.key:
+            return self.__search_recursive(root.right, key)
         else:
-            return self._search_recursive(node.left, target, key)
+            return self.__search_recursive(root.left, key)
 
 
-    def __search_iterative(self, node, target, key=None):
-        if node is None:
-            return
-        key = self.__set_key(key)
-        while node:
-            if key(node.data) == target:
-                return node
-            if key(node.data) < target:
-                node = node.right
+    def __search_iterative(self, root, key):
+        if root is None:
+            return None
+        #
+        while root:
+            if root.key == key:
+                return root
+            if root.key < key:
+                root = root.right
             else:
-                node = node.left
+                root = root.left
 
 
     def __parent_search(self, root, target, key=None):
