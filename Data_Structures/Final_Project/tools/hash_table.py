@@ -77,9 +77,9 @@ class DynamicHash:
             self.__arr = Array(m)
             self.__size = m
             self.__useful = 0
-            for node in sll:
-                key = node.data.key
-                value = node.data.value
+            for item in sll:
+                key = item.key
+                value = item.value
                 self[key] = value
             # print("len", len(sll), "size", len(self.__arr))
             sll.clear()
@@ -101,9 +101,9 @@ class DynamicHash:
             self.__arr = Array(m)
             self.__size = m
             self.__useful = 0
-            for node in sll:
-                key = node.data.key
-                value = node.data.value
+            for item in sll:
+                key = item.key
+                value = item.value
                 self[key] = value
             # print("len", len(sll), "size", len(self.__arr))
             sll.clear()
