@@ -137,8 +137,18 @@ class SLL:
                 else:
                     return None
   
-    def __iter__(self):
+    def iter(self, as_data=False):
         node = self.head
         while node:
-            yield node
+            if as_data:
+                yield node.data
+            else:
+                yield node
             node = node.next
+
+    def __iter__(self):
+        # node = self.head
+        # while node:
+        #     yield node
+        #     node = node.next
+        return self.iter(as_data=True)
