@@ -1,7 +1,8 @@
 from tools.hash_table import DynamicHash
 from tools.linked_list import SLL
 from tools.tree import BST
-
+from tools.applied_functions import set_attrs
+from file_handler import LoadCSV
 
 
 
@@ -72,26 +73,50 @@ class Costs:
 
 
 
+
 class ConsignmentManager:
+
     def __init__(self) -> None:
         self.__table = DynamicHash()
         self.__costs = Costs()
 
 
+    def insert_from_csv(self, file_path=None):
+        file = LoadCSV(file_path)
+        for item in file.lines():
+            self.add(item)
+
+
     def add(self, data):
-        node = self.create_consignment_node(data)
-        if node.id not in self.__table:
-            self.__table[node.id] = node
-            self.__costs.add(id=node.id, cost=int(node.cost))
+        consign = self.__get_consignment_node(data)
+        # check id
+        if consign.id not in self.__table:
+            self.__table[consign.id] = consign
+            self.__costs.add(id=consign.id, cost=int(consign.cost))
         else:
-            print(f"tekrari: {node.id}")
+            print(f"Error: This id `{consign.id}` exist in table.")
+
+
+    def __get_consignment_node(self, consign_data):
+        attrs = ("id", 
+                "weight", 
+                "subscription_code", 
+                "registration_date", 
+                "delivery_date", 
+                "cost", 
+                "group",)
+        consign = Consignment()
+        set_attrs(consign, attrs, consign_data)
+        return consign
 
     
     def search(self, id):
         item = self.__table[id]
         return item
     
-    def get_costs_less_then(self, cost: int):
+    def show_costs_less_then(self, cost: int):
+        print("-------------------------")
+        print(f"All consingment less then {cost}\n")
         for id in self.__costs.less_of(cost):
             # print(id)
             print(self.__table[id])
@@ -100,36 +125,10 @@ class ConsignmentManager:
     def show_all(self):
         for key in self.__table:
             print(self.__table[key])
-
-
-    def create_consignment_node(self, item_values):
-        attr = ("id", 
-                "weight", 
-                "subscription_code", 
-                "registration_date", 
-                "delivery_date", 
-                "cost", 
-                "group",
-                )
-        node = Consignment()
-        for i in range(len(attr)):
-            setattr(node, attr[i], item_values[i])
-        return node
-
-
-    def consignments_csv(self):
-        path = "data_structures\Final_Project\consignments.csv"
-        with open(path, "+r")as f:
-            for item in f:
-                item = item.strip("\n")
-                item = item.rsplit(',')
-                yield item
-
-
-    def insert_from_csv(self):
-        for item in self.consignments_csv():
-            self.add(item)
+    
     ...
+
+
 
 
 
@@ -137,7 +136,8 @@ class ConsignmentManager:
 
 if __name__ == "__main__":
     c_manager = ConsignmentManager()
-    c_manager.insert_from_csv()
+    consignments_path = "data_structures\\Final_Project\\data\\consignments.csv"
+    c_manager.insert_from_csv(consignments_path)
     # c_manager.show_all()
     # print(c_manager.search("CDA1234"))
-    # c_manager.get_costs_less_then(1750)
+    c_manager.show_costs_less_then(1500)
