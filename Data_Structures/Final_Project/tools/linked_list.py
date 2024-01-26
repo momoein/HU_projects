@@ -147,8 +147,7 @@ class SLL:
             node = node.next
 
     def __iter__(self):
-        # node = self.head
-        # while node:
-        #     yield node
-        #     node = node.next
         return self.iter(as_data=True)
+    
+    ...
+
