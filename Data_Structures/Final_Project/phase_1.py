@@ -111,8 +111,9 @@ class ConsignmentManager:
 
     
     def search(self, id):
-        item = self.__table[id]
-        return item
+        if id in self.__table:
+            item = self.__table[id]
+            return item
     
     def show_costs_less_then(self, cost: int):
         print("-------------------------")
@@ -133,11 +134,10 @@ class ConsignmentManager:
 
 
 
-
 if __name__ == "__main__":
     c_manager = ConsignmentManager()
-    consignments_path = "data_structures\\Final_Project\\data\\consignments.csv"
+    consignments_path = "data_structures\\Final_Project\\data\\delivered_parcel.csv"
     c_manager.insert_from_csv(consignments_path)
     # c_manager.show_all()
-    # print(c_manager.search("CDA1234"))
-    c_manager.show_costs_less_then(1500)
+    # print(c_manager.search("GED5828"))
+    # c_manager.show_costs_less_then(1_000_000)
