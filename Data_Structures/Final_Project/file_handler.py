@@ -1,12 +1,19 @@
 from typing import Iterable, Any
 import csv
-
+from os.path import exists
 
 
 class LoadCSV:
 
     def __init__(self, path) -> None:
         self.path = path
+
+
+    def is_exist(self):
+        if exists(self.path):
+            return True
+        else:
+            return False
 
 
     def lines(self):
