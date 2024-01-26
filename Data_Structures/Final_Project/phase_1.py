@@ -46,8 +46,7 @@ class Costs:
         root = self.__bst.root
         costs = SLL()
         self.__get_lt(root, cost, costs)
-        for i in costs:
-            id = i.data
+        for id in costs:
             yield id
         
 
@@ -61,8 +60,8 @@ class Costs:
             if root.key > cost:
                 return None
             else:
-                for node in root.data:
-                    sll.insert(node.data)
+                for item in root.data:
+                    sll.insert(item)
             #
             self.__get_lt(root.right, cost, sll)
 
