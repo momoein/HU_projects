@@ -68,7 +68,6 @@ class Costs:
 
     def __search(self, key):
         return self.__bst.search(key)
-    
     ...
 
 
@@ -130,7 +129,6 @@ class ConsignmentManager:
     def insert_from_csv(self):
         for item in self.consignments_csv():
             self.add(item)
-
     ...
 
 
