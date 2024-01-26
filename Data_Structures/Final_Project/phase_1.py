@@ -81,7 +81,7 @@ class ConsignmentManager:
         self.__costs = Costs()
 
 
-    def insert_from_csv(self, file_path=None):
+    def insert_from_csv(self, file_path):
         file = LoadCSV(file_path)
         for item in file.lines():
             self.add(item)
