@@ -2,6 +2,24 @@ import numpy as np
 
 
 
+# activation function and its derivative
+def tanh(x):
+    return np.tanh(x)
+
+def tanh_prime(x):
+    return 1-np.tanh(x)**2
+
+
+# loss function and its derivative
+def mse(y_true, y_pred):
+    return np.mean(np.power(y_true-y_pred, 2))
+
+def mse_prime(y_true, y_pred):
+    return 2*(y_pred-y_true)/y_true.size
+
+
+
+# fully connectd layer
 class FCLayer:
     # input_size = number of input neurons
     # output_size = number of output neurons
@@ -43,21 +61,6 @@ class ActivationLayer:
     def backward_propagation(self, output_error):
         return self.activation_prime(self.input) * output_error
     
-
-
-def tanh(x):
-    return np.tanh(x)
-
-def tanh_prime(x):
-    return 1-np.tanh(x)**2
-
-
-# loss function and its derivative
-def mse(y_true, y_pred):
-    return np.mean(np.power(y_true-y_pred, 2))
-
-def mse_prime(y_true, y_pred):
-    return 2*(y_pred-y_true)/y_true.size
 
 
 class Network:
@@ -116,8 +119,5 @@ class Network:
             # calculate average error on all samples
             err /= samples
             print('epoch %d/%d   error=%f' % (i+1, epochs, err))
-
-
-
 
 
