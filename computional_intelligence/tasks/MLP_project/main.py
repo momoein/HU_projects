@@ -15,12 +15,15 @@ y = np.array(target_[0])
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4321)
 
-# X_train = np.array([[[-2.08796522, -4.4014648 ]],
-#                     [[-0.63371396,  2.09373378]],
-#                     [[ 2.69171633, -3.35786877]],
-#                     [[-3.19845804,  4.52217065]],])
-
-# y_train =np.array([ [[1]], [[-1]], [[-1]], [[-1]] ])
+"""
+sample X input : np.array([
+                           [[-2.08796522, -4.4014648 ]],
+                           [[-0.63371396,  2.09373378]],
+                           [[ 2.69171633, -3.35786877]],
+                           [[-3.19845804,  4.52217065]],
+                           ])
+sample y input : np.array([ [[1]], [[-1]], [[-1]], [[-1]] ])
+"""
 
 n = y_train.size
 y_ = []
@@ -38,9 +41,9 @@ y_train = y_
 
 # network
 net = Network()
-net.add(FCLayer(2, 2))
+net.add(FCLayer(2, 5))
 net.add(ActivationLayer(tanh, tanh_prime))
-net.add(FCLayer(2, 1))
+net.add(FCLayer(5, 1))
 net.add(ActivationLayer(tanh, tanh_prime))
 
 # train
