@@ -1,4 +1,4 @@
-from cli import *
+from interface.cli import *
 from sys import exit
 from tools.array import Array
 
