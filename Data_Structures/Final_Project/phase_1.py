@@ -74,8 +74,8 @@ class Costs:
 
 
 
-class ConsignmentManager:
-
+class DeliveredPM:
+    """Delivered Parcel Manager"""
     def __init__(self) -> None:
         self.__table = DynamicHash()
         self.__costs = Costs()
@@ -131,13 +131,15 @@ class ConsignmentManager:
 
 
 
+    
+
 
 
 
 if __name__ == "__main__":
-    c_manager = ConsignmentManager()
-    consignments_path = "data_structures\\Final_Project\\data\\delivered_parcel.csv"
-    c_manager.insert_from_csv(consignments_path)
+    c_manager = DeliveredPM()
+    delivered_parcel_path = "data_structures\\Final_Project\\data\\delivered_parcel.csv"
+    # c_manager.insert_from_csv(delivered_parcel_path)
     # c_manager.show_all()
     # print(c_manager.search("GED5828"))
     # c_manager.show_costs_less_then(1_000_000)
