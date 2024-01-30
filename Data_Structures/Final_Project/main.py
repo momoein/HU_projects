@@ -1,4 +1,4 @@
-from interface.cli import *
+import interface.cli as cli
 from sys import exit
 from tools.array import Array
 
@@ -14,7 +14,7 @@ class Menu:
     def phase1(self):
 
         while True:
-            print(phase1_cli)
+            print(cli.phase1)
             inp = input(">>> ").strip()
             if inp == "00":
                 exit()
@@ -77,7 +77,7 @@ class Menu:
 if __name__ == "__main__":
     menu = Menu()
     while True:
-        print(main_cli)
+        print(cli.main)
         inp = input(">>> ").strip()
         if inp == "00":
             break
