@@ -2,7 +2,7 @@ from tools.hash_table import DynamicHash
 from tools.linked_list import SLL
 from tools.tree import BST
 from tools.applied_functions import set_attrs
-from file_handler import LoadCSV
+from tools.file_handler import LoadCSV
 
 
 
