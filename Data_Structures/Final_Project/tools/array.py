@@ -8,6 +8,9 @@ class Array:
     def get(self):
         return self.__array 
     
+    def set(self, array):
+        self.__array = array
+    
     def __setitem__(self, index, data):
         if abs(index) < self.__len:
             self.__array[index] = data
