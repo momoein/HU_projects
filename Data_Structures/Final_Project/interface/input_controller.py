@@ -49,4 +49,14 @@ class InputController:
                 return inp
             inp = input("?!> ").strip()
 
-
+    @staticmethod
+    def get_status():
+        grp = Array()
+        grp.set(["A", "D", "a", "d"])
+        #
+        inp = input(">>> ").strip()
+        while True:
+            if len(inp) == 1 and inp in grp:
+                return inp.upper()
+            inp = input("?!> ").strip()
+...
