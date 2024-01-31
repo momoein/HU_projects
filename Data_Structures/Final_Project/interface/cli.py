@@ -1,15 +1,16 @@
-main ="""
+main_panel ="""
 -------------------------------------------
 #  main menu
 
 1) phase 1 
 2) phase 2 
 3) phase 3 
+4) date 
 
 exit >> 00
 """
 
-phase1 ="""
+phase1_panel ="""
 -------------------------------------------
 #  Consignment manager
 
@@ -24,7 +25,7 @@ exit >> 00
 """
 
 
-phase2 ="""
+phase2_panel ="""
 -------------------------------------------
 #  Delivery manager
 
@@ -39,6 +40,21 @@ phase2 ="""
  9) Show all delivered parcel 
 10) Show all not delivered parcel 
 11) show by day 
+
+back >> 0  
+exit >> 00
+"""
+
+
+phase2_edit_delivery_info_panel ="""
+-------------------------------------------
+#  Edit delivery info
+ {0}
+ 1) Edit name 
+ 2) Edit last name
+ 3) Edit national code
+ 4) Edit capacity
+ 5) Edit status
 
 back >> 0  
 exit >> 00
