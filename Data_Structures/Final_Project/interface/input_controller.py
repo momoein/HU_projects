@@ -26,7 +26,7 @@ class InputController:
         inp = input(">>> ").strip()
         while True:
             spl = inp.split("-")
-            if len(spl) == 3 and all(map(lambda x: x.isdigit(), spl)):
+            if len(spl) == 3 and all(map(lambda x: x.isdigit() and int(x) != 0, spl)):
                 return inp
             inp = input("?!> ").strip()
 

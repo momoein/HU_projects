@@ -5,8 +5,7 @@ from tools.applied_functions import set_attrs
 from tools.file_handler import LoadCSV
 
 
-
-class Consignment:
+class Parcel:
     def __init__(self) -> None:
         self.id = None
         self.weight = None
@@ -17,14 +16,15 @@ class Consignment:
         self.group = None
 
     def __repr__(self) -> str:
-        info = f"""Consignment:
-            id: '{self.id}'
-            weight: '{self.weight}'
-            subscription_code: '{self.subscription_code}'
-            registration_date: '{self.registration_date}'
-            delivery_date: '{self.delivery_date}'
-            cost: '{self.cost}'
-            group: '{self.group}' """
+        info = f"""Parcel: 
+        id: '{self.id}'
+        weight: '{self.weight}'
+        subscription_code: '{self.subscription_code}'
+        registration_date: '{self.registration_date}'
+        delivery_date: '{self.delivery_date}'
+        cost: '{self.cost}'
+        group: '{self.group}' 
+        """
         return info
 
 
@@ -74,15 +74,16 @@ class Costs:
 
 
 
-class DeliveredPM:
+class DeliveredParcels:
     """Delivered Parcel Manager"""
     def __init__(self) -> None:
         self.__table = DynamicHash()
         self.__costs = Costs()
 
 
-    def insert_from_csv(self, file_path):
-        file = LoadCSV(file_path)
+    def insert_from_csv(self):
+        path = "data_structures\\Final_Project\\data\\delivered_parcel.csv"
+        file = LoadCSV(path)
         for item in file.lines():
             self.add(item)
 
@@ -105,7 +106,7 @@ class DeliveredPM:
                 "delivery_date", 
                 "cost", 
                 "group",)
-        consign = Consignment()
+        consign = Parcel()
         set_attrs(consign, attrs, consign_data)
         return consign
 
@@ -117,7 +118,7 @@ class DeliveredPM:
     
     def show_costs_less_then(self, cost: int):
         print("-------------------------")
-        print(f"All consingment less then {cost}\n")
+        print(f"All parcel less then {cost}\n")
         for id in self.__costs.less_of(cost):
             # print(id)
             print(self.__table[id])
@@ -129,17 +130,3 @@ class DeliveredPM:
     
     ...
 
-
-
-    
-
-
-
-
-if __name__ == "__main__":
-    c_manager = DeliveredPM()
-    delivered_parcel_path = "data_structures\\Final_Project\\data\\delivered_parcel.csv"
-    # c_manager.insert_from_csv(delivered_parcel_path)
-    # c_manager.show_all()
-    # print(c_manager.search("GED5828"))
-    # c_manager.show_costs_less_then(1_000_000)

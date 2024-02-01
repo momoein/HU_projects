@@ -7,7 +7,7 @@ class Calendar:
     def __init__(self, origin=2000, num_years=100) -> None:
         self.origin = origin
         self.num_years = num_years
-        self.__days = Array(size=(num_years*12*30))
+        self.__days = Array(size=num_years*359 + 1)
 
     
     def scale(self, year):
@@ -16,37 +16,45 @@ class Calendar:
 
     def get_index(self, indices):
         y, m, d = indices
-        indx = 30*(m-1) + d-1 # for one year
-        indx = (indx*self.scale(y)) + indx
+        days = 30*(m-1) + d-1 # for one year
+        years = self.scale(y) * 359
+        indx = years + days
         return indx
 
 
-    def int_format_date(self, key: str):
+    def get_indices(self, key: str):
         D = key.split("-")
         y, m, d = int(D[0]), int(D[1]), int(D[2])
         return y, m, d
 
 
-    def insert(self, indices, value):
+    def insert(self, indices: str, value):
         """indices = (yaer, month, day)
         yaer: `origin < y < orogin + num_years`
         month: `1 <= m <= 12`
         day: `0 <= d <= 12`"""
         #
+        indices = self.get_indices(indices)
         self.chack_indices(indices)
         indx = self.get_index(indices)
         self.__days[indx] = value
 
 
-    def get(self, indices):
+    def get(self, indices: str):
         """indices = (yaer, month, day)
         yaer: `origin < y < orogin + num_years`
         month: `1 <= m <= 12`
         day: `0 <= d <= 12`"""
         #
+        indices = self.get_indices(indices)
         self.chack_indices(indices=indices)
         indx = self.get_index(indices=indices)
         return self.__days[indx]
+
+
+    def get_by_index(self, index):
+        if index < len(self.__days):
+            return self.__days[index]
 
 
     def __setitem__(self, indices, value):
@@ -73,4 +81,9 @@ class Calendar:
     def __iter__(self):
         for i in range((359*self.num_years) + 1):
             yield self.__days[i]
+
+    def __len__(self):
+        return (359*self.num_years) + 1
+
+
 

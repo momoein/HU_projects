@@ -119,6 +119,9 @@ class SLL:
                 del node
                 self.__len -= 1
                 return None
+            
+    def delete(self, node):
+        self.__delitem__(node)
 
     def search(self, target, key=lambda x: x.data): 
         for i in self:

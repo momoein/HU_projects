@@ -2,12 +2,13 @@ from typing import Any, Iterable
 from tools.hash_table import DynamicHash
 from tools.linked_list import SLL
 from tools.applied_functions import set_attrs
-from file_handler import LoadCSV
-from tools.array import DynamicArray
+from tools.file_handler import LoadCSV
+from tools.array import DynamicArray, Array
+from phase_1 import Parcel
 
 
 
-class Paik:
+class Delivery:
 
     def __init__(self) -> None:
         self.recruitment_id = None
@@ -16,10 +17,15 @@ class Paik:
         self.national_code = None
         self.capacity = None
         self.status = None
+        self.daycap = 0 # capacity in day
     
+    def is_free(self):
+        if self.daycap < int(self.capacity):
+            return True
+        return False
 
     def __repr__(self) -> str:
-        info = f"""Paik: {{
+        info = f"""Delivery: {{
         recruitment_id: '{self.recruitment_id}'
         name: '{self.name}'
         last_name: '{self.last_name}'
@@ -28,37 +34,42 @@ class Paik:
         status: '{self.status}' 
         }}"""
         return info
-    
+
 
 
 
 class Deliveries:
 
     def __init__(self) -> None:
-        self.__table = DynamicHash()
+        self.__national_code = DynamicHash()
         self.__nop = 0   #number of paik's
         self.__deliveries = DynamicArray()
+        # self.__capacity = DynamicArray()
+
     
 
-    def insert_paik_from_csv(self, file_path):
-        file = LoadCSV(file_path)
+    def insert_paik_from_csv(self):
+        path = "data_structures\\Final_Project\\data\\delivery_information.csv"
+        file = LoadCSV(path)
         for line in file.lines():
-            self.add_paik(line)
+            self.add_delivery(line)
 
 
-    def add_paik(self, paik_info: Iterable[str]):
+    def add_delivery(self, paik_info: Iterable[str]):
         paik = self.__make_paik_node(paik_info)
         n_code = paik.national_code
         # checks the paik national code
-        if n_code in self.__table:
+        if n_code in self.__national_code:
             error = f"Error: This national code `{n_code}` exist in table."
             print(error)
             return None
+        
         # Adding paik to the table
         self.__nop += 1
         paik.recruitment_id = str(self.__nop)
         self.__deliveries.append(paik)
-        self.__table[n_code] = paik
+        # self.__capacity.append("0")
+        self.__national_code[n_code] = paik.recruitment_id
 
 
     def __make_paik_node(self, paik_info: Iterable[str]):
@@ -67,7 +78,7 @@ class Deliveries:
                  "national_code", 
                  "capacity", 
                  "status")
-        paik = Paik()
+        paik = Delivery()
         set_attrs(paik, attrs, paik_info)
         return paik
 
@@ -81,104 +92,161 @@ class Deliveries:
         return self.__deliveries[int(id)-1]
     
 
-    def edit_paik_info(self, id, keyword, value):
+    def edit_delivery_info(self, id, keyword, value: str):
         if keyword == "recruitment_id":
-            error = "`recruitment id` has not changeable"
-            print(error)
+            print("`recruitment id` has not changeable")
             return None
+        #
+        if keyword == "national_code":
+            if value in self.__national_code:
+                print(f"this national code: '{value}' not unique")
+                return None
+            self.__national_code.delete(key=value)
+            self.__national_code.insert(key=value, value=id)
+        #  
         paik = self.get_paik_by_id(id)
         setattr(paik, keyword, value)
-        #
         print(paik)
         print(f"The '{keyword}' change to:", getattr(paik, keyword))
+
+
+    def is_delivery(self, id):
+        if int(id)-1 < len(self.__deliveries):
+            return True
+        else:
+            return False
+        
+    def search_delivery(self, id):
+        if self.is_delivery(id):
+            return self.get_paik_by_id(id)
+        
+    def is_free(self, id):
+        deliver = self.__deliveries[int(id)]
+        cap = deliver.capacity
+        daycap = deliver.daycap
+        if daycap < int(cap):
+            return True
+        return False
+
+    def __iter__(self):
+        for delivery in self.__deliveries:
+            yield delivery
     ...
 
 
 
 
-class NotDeliveredParcel:
+class Day:
     def __init__(self) -> None:
-        self.parcel_id = None
-        self.weight = None
-        self.subscription_code = None
-        self.registration_date = None
-        self.cost = None
-        self.group = None
+        self.waiting = DynamicHash()
+        self.posted = SLL()
 
-    def __repr__(self) -> str:
-        info = f"""not delivered parcel:
-            id: '{self.id}'
-            weight: '{self.weight}'
-            subscription_code: '{self.subscription_code}'
-            registration_date: '{self.registration_date}'
-            cost: '{self.cost}'
-            group: '{self.group}' """
-        return info
+    def add_to_waiting(self, parcel_node):
+        if parcel_node is None:
+            return None
+        if parcel_node.group == "F":
+            if "F" in self.waiting:
+                self.waiting["F"].append(parcel_node)
+                return None
+            self.waiting["F"] = SLL()
+            self.waiting["F"].append(parcel_node)
+        #
+        if parcel_node.group == "C":
+            if "C" in self.waiting:
+                self.waiting["C"].append(parcel_node)
+                return None
+            self.waiting["C"] = SLL()
+            self.waiting["C"].append(parcel_node)
+        #
+        if parcel_node.group == "O":
+            if "O" in self.waiting:
+                self.waiting["O"].append(parcel_node)
+                return None
+            self.waiting["O"] = SLL()
+            self.waiting["O"].append(parcel_node)
+
+
+    def add_to_posted(self, delivery_node, parcel_node):
+        info = Array(size=2)
+        info[0] = delivery_node.recruitment_id
+        info[1] = parcel_node.id
+        self.posted.append(info)
+
+    def show_all_in_waiting(self):
+        if self.waiting is None:
+            return None
+        for item in self.waiting["F"]:
+            # print(item)
+            yield item
+        for item in self.waiting["C"]:
+            # print(item)
+            yield item
+        for item in self.waiting["O"]:
+            # print(item)
+            yield item
+
+    def  show_all_in_posted(self):
+        for item in self.posted:
+            # print(item)
+            yield item
+        
+
 
 
 class SendQueue:
-
     def __init__(self) -> None:
-        self.__days = DynamicHash()
+        self._table = DynamicHash()
 
-    def insert_from_csv(self, path):
-        file = LoadCSV(path)
-        for line in file.lines():
-            self.add(line)
+    def add_parcel(self, parcel_info):
+        parcel = self.creat_parcel_node(parcel_info)
+        reg_date = parcel.registration_date
 
-    def add(self, parcel_info):
-        parcel = self.__make_parcel_node(parcel_info)
-        ...
+        if reg_date not in self._table:
+            sll = SLL()
+            sll.append(parcel)
+            self._table[reg_date] = sll
+        self._table[reg_date].append(parcel)
         
 
-    def __make_parcel_node(self, parcel_info: Iterable[str]):
+    def show_parcels(self):
+        for key in self._table:
+            for item in self._table[key]:
+                print(item)
+
+
+    def inser_from_csv(self):
+        path = "data_structures\\Final_Project\\data\\not_delivered_parcel.csv"
+        file = LoadCSV(path)
+        for item in file.lines():
+            self.add_parcel(item)
+    
+    def creat_parcel_node(self, paik_info: Iterable[str]):
         attrs = ("id", 
                 "weight", 
                 "subscription_code", 
                 "registration_date", 
                 "cost", 
                 "group",)
-        parcel = NotDeliveredParcel()
-        set_attrs(parcel, attrs, parcel_info)
+        parcel = Parcel()
+        set_attrs(parcel, attrs, paik_info)
         return parcel
 
-    
-    
-class Day:
-    def __init__(self) -> None:
-        self.waiting = DynamicHash()
-        self.Posted = SLL()
-        self.failed = SLL()
+    def search_parcel(self, key):
+        if key in self._table:
+            for item in self._table[key]:
+                print(item)
 
-    # def add(self, percel_node):
-    #     ...
-
-class Days:
-    def __init__(self) -> None:
-        self.__table = DynamicHash()
+    def same_date(self, date):
+        if date in self._table:
+            return self._table[date]
+                
 
     
+        
+
+
     
 
-
-from datetime import date
-
-
-
-def get_date(date_: str):
-    D = date_.split("-")
-    y, m, d = int(D[0]), int(D[1]), int(D[2])
-    return date(y, m, d)
-
-def days_difference(d1, d2):
-    delta = d2 - d1
-    return delta.days
-
-start = get_date("2024-01-05")
-end = get_date("2024-01-07")
-
-res = days_difference(end, start)
-print(res)
 
 
 
@@ -187,8 +255,8 @@ print(res)
 # em = Deliveries()
 # path = "data_structures\\Final_Project\\data\\delivery_information.csv"
 # em.insert_paik_from_csv(path)
-# em.show_all_paikes()
-# print(em.get_paik_by_id(10))
-# em.edit_paik_info(10, "capacity", "85")
+# # em.show_all_paikes()
+# # print(em.get_paik_by_id(13))
+# # em.edit_paik_info(10, "capacity", "85")
 
-
+# print(em.search_paik(13))
