@@ -1,7 +1,7 @@
 a = [1,2,3]
 
 def power_set(array):
-    if len(array) == 1:
+    if len(array) <= 1:
         return array
     n_th = array[-1]
     set = power_set(array[:-1])
